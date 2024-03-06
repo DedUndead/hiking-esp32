@@ -18,6 +18,8 @@ uint32_t sessionId = 30;
 volatile uint8_t state;
 volatile bool irqBMA = false;
 volatile bool irqButton = false;
+volatile uint updateTimeout = 0;
+volatile uint last = 0;
 
 bool sessionStored = false;
 bool sessionSent = false;
@@ -51,8 +53,9 @@ void initHikeWatch()
 
 void sendDataBT(fs::FS &fs, const char * path)
 {
+
     /* Sends data via SerialBT */
-    File file = fs.open(path);
+    fs::File file = fs.open(path);
     if(!file || file.isDirectory()){
         Serial.println("- failed to open file for reading");
         return;
